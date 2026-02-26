@@ -76,7 +76,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       movie.origin_name ? ` (${movie.origin_name})` : ""
     } - LocsongPhim`;
     const categories = movie.category?.map((c) => c.name).join(", ") ?? "";
-    const pageUrl = `${OPHIM_CONFIG.BASE_URL}/phim/${slug}`;
+    const siteUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+    const pageUrl = `${siteUrl}/phim/${slug}`;
 
     return {
       title,
