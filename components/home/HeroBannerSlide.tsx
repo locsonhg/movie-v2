@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import type { MovieItem } from "@/types/ophim";
 import { OPHIM_CONFIG } from "@/constants/ophim";
 import { useMovieImages } from "@/hooks/useOphimQueries";
@@ -18,18 +19,50 @@ export function HeroBannerSlide({
   cdnUrl = OPHIM_CONFIG.CDN_IMAGE_URL,
 }: HeroBannerSlideProps) {
   const { data: imagesData } = useMovieImages(movie.slug);
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth >= 1024;
+    }
+    return true;
+  });
 
-  // Pick first high-quality backdrop; fallback to poster_url from list
-  const backdrop = imagesData?.images?.find((img) => img.type === "backdrop");
-  const bgUrl =
-    backdrop && imagesData
-      ? buildTmdbImageUrl(
-          imagesData.image_sizes,
-          "backdrop",
-          backdrop.file_path,
-          "w1280"
-        )
-      : normalizeImageUrl(movie.poster_url, cdnUrl);
+  useEffect(() => {
+    // Listen for resize
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Pick backdrop for desktop, poster for mobile
+  let bgUrl: string | null = null;
+
+  if (isDesktop) {
+    // Desktop: use backdrop (horizontal)
+    const backdrop = imagesData?.images?.find((img) => img.type === "backdrop");
+    bgUrl =
+      backdrop && imagesData
+        ? buildTmdbImageUrl(
+            imagesData.image_sizes,
+            "backdrop",
+            backdrop.file_path,
+            "original"
+          )
+        : normalizeImageUrl(movie.poster_url, cdnUrl);
+  } else {
+    const poster = imagesData?.images?.find((img) => img.type === "poster");
+    bgUrl =
+      poster && imagesData
+        ? buildTmdbImageUrl(
+            imagesData.image_sizes,
+            "poster",
+            poster.file_path,
+            "w500"
+          )
+        : normalizeImageUrl(movie.poster_url, cdnUrl);
+  }
 
   return (
     <div

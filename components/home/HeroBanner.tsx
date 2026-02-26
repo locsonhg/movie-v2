@@ -42,7 +42,7 @@ export function HeroBanner({
     : null;
 
   return (
-    <div className="relative mb-8 h-[85vh] min-h-140 w-full overflow-hidden">
+    <div className="relative h-screen w-full overflow-hidden">
       {/* Background slides */}
       {featured.map((m, i) => (
         <HeroBannerSlide
@@ -54,33 +54,33 @@ export function HeroBanner({
       ))}
 
       {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/30 to-transparent" />
-      <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/15 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
       {/* Top gradient for header readability */}
-      <div className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-black/50 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-black/40 to-transparent" />
 
       {/* Bottom content area */}
       <div className="absolute inset-x-0 bottom-0 px-4 pb-14 md:px-6 md:pb-16">
         <div className="flex items-end justify-between gap-8">
           {/* LEFT: Movie info */}
-          <div className="max-w-lg">
+          <div className="max-w-2xl">
             {/* Title */}
-            <h1 className="mb-1 text-3xl font-bold leading-tight text-white drop-shadow-lg md:text-4xl">
+            <h1 className="mb-1 text-4xl font-bold leading-tight text-white drop-shadow-lg md:text-5xl lg:text-6xl">
               {movie.name}
             </h1>
 
             {/* Original name */}
             {movie.origin_name && (
-              <p className="mb-3 text-sm italic text-[#f5a623]">
+              <p className="mb-3 text-base italic text-[#f5a623] md:text-lg">
                 {movie.origin_name}
               </p>
             )}
 
             {/* Info badges row */}
-            <div className="mb-2 flex flex-wrap items-center gap-1.5">
+            <div className="mb-4 flex flex-wrap items-center gap-2">
               {/* IMDb badge */}
               {detail?.imdb?.vote_average ? (
-                <span className="inline-flex items-center gap-1 rounded border border-white/20 bg-[#1c1c1c] px-2 py-0.5 text-xs font-bold">
+                <span className="inline-flex items-center gap-1 rounded border border-white/20 bg-[#1c1c1c] px-3 py-1 text-sm font-bold md:text-base">
                   <span className="text-[#f5c518]">IMDb</span>
                   <span className="text-white">
                     {detail.imdb.vote_average.toFixed(1)}
@@ -88,22 +88,22 @@ export function HeroBanner({
                 </span>
               ) : null}
               {movie.quality && (
-                <span className="rounded bg-[#e50914] px-2 py-0.5 text-xs font-bold uppercase text-white">
+                <span className="rounded bg-[#e50914] px-3 py-1 text-sm font-bold uppercase text-white md:text-base">
                   {movie.quality}
                 </span>
               )}
               {movie.year && (
-                <span className="rounded border border-white/30 bg-white/10 px-2 py-0.5 text-xs font-medium text-white">
+                <span className="rounded border border-white/30 bg-white/10 px-3 py-1 text-sm font-medium text-white md:text-base">
                   {movie.year}
                 </span>
               )}
               {movie.type && (
-                <span className="rounded border border-white/30 bg-white/10 px-2 py-0.5 text-xs font-medium text-white">
+                <span className="rounded border border-white/30 bg-white/10 px-3 py-1 text-sm font-medium text-white md:text-base">
                   {movie.type === "series" ? "Phim Bộ" : "Phim Lẻ"}
                 </span>
               )}
               {movie.episode_current && (
-                <span className="rounded border border-white/30 bg-white/10 px-2 py-0.5 text-xs font-medium text-white">
+                <span className="rounded border border-white/30 bg-white/10 px-3 py-1 text-sm font-medium text-white md:text-base">
                   {movie.episode_current}
                 </span>
               )}
@@ -125,20 +125,20 @@ export function HeroBanner({
 
             {/* Description */}
             {description && (
-              <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-white/60">
+              <p className="mb-6 line-clamp-3 text-base leading-relaxed text-white/60 md:text-lg">
                 {description}
               </p>
             )}
 
             {/* Action buttons */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Link
                 href={`/phim/${movie.slug}`}
-                className="flex h-12 w-12 items-center justify-center rounded-full bg-[#f5a623] shadow-lg shadow-[#f5a623]/30 transition-all hover:scale-105 hover:bg-[#e09616]"
+                className="flex h-16 w-16 items-center justify-center rounded-full bg-[#f5a623] shadow-lg shadow-[#f5a623]/30 transition-all hover:scale-105 hover:bg-[#e09616] md:h-14 md:w-14"
                 aria-label="Xem ngay"
               >
                 <svg
-                  className="ml-0.5 h-5 w-5 text-white"
+                  className="ml-0.5 h-7 w-7 text-white md:h-6 md:w-6"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -147,11 +147,11 @@ export function HeroBanner({
               </Link>
 
               <button
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20"
+                className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20 md:h-12 md:w-12"
                 aria-label="Yêu thích"
               >
                 <svg
-                  className="h-4.5 w-4.5 text-white"
+                  className="h-6 w-6 text-white md:h-5 md:w-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -167,11 +167,11 @@ export function HeroBanner({
 
               <Link
                 href={`/phim/${movie.slug}`}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20"
+                className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20 md:h-12 md:w-12"
                 aria-label="Chi tiết"
               >
                 <svg
-                  className="h-4.5 w-4.5 text-white"
+                  className="h-6 w-6 text-white md:h-5 md:w-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
