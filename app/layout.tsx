@@ -22,10 +22,36 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "LocsonhgPhim - Xem Phim Miễn Phí Chất Lượng Cao",
   description:
-    "Trang xem phim online miễn phí chất lượng cao. Vietsub, thuyết minh, lồng tiếng Full HD – 4K.",
+    "Trang xem phim online miễn phí chất lượng cao. Vietsub, thuyết minh, lồng tiếng Full HD – 4K. Phim lẻ, phim bộ, anime cập nhật liên tục mỗi ngày.",
+  keywords:
+    "xem phim online, phim miễn phí, vietsub, phim HD, anime, phim bộ, phim lẻ",
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     apple: "/icon.svg",
+  },
+  openGraph: {
+    title: "LocsonhgPhim - Xem Phim Miễn Phí Chất Lượng Cao",
+    description:
+      "Trang xem phim online miễn phí chất lượng cao. Vietsub, thuyết minh, lồng tiếng Full HD – 4K. Phim lẻ, phim bộ, anime cập nhật liên tục mỗi ngày.",
+    url: SITE_URL,
+    siteName: "LocsonhgPhim",
+    type: "website",
+    locale: "vi_VN",
+    images: [
+      {
+        url: "/banner/banner.png",
+        width: 1200,
+        height: 630,
+        alt: "LocsonhgPhim - Xem Phim Online Miễn Phí",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "LocsonhgPhim - Xem Phim Miễn Phí Chất Lượng Cao",
+    description:
+      "Trang xem phim online miễn phí chất lượng cao. Vietsub, thuyết minh, lồng tiếng Full HD – 4K.",
+    images: ["/banner/banner.png"],
   },
 };
 
