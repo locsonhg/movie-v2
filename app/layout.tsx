@@ -39,12 +39,12 @@ export const metadata: Metadata = {
     locale: "vi_VN",
     images: [
       {
-        url: `${SITE_URL}/banner/banner.png`,
-        secureUrl: `${SITE_URL}/banner/banner.png`,
+        url: `${SITE_URL}/banner/banner.jpg`,
+        secureUrl: `${SITE_URL}/banner/banner.jpg`,
         width: 1200,
         height: 630,
         alt: "LocsonhgPhim - Xem Phim Online Miễn Phí",
-        type: "image/png",
+        type: "image/jpeg",
       },
     ],
   },
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     title: "LocsonhgPhim - Xem Phim Miễn Phí Chất Lượng Cao",
     description:
       "Trang xem phim online miễn phí chất lượng cao. Vietsub, thuyết minh, lồng tiếng Full HD – 4K.",
-    images: [`${SITE_URL}/banner/banner.png`],
+    images: [`${SITE_URL}/banner/banner.jpg`],
   },
 };
 
