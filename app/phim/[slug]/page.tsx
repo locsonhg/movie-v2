@@ -82,7 +82,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     // 3. Fallback to CDN URLs
     if (!imageUrl && movie.poster_url) {
-      imageUrl = normalizeImageUrl(movie.poster_url, OPHIM_CONFIG.CDN_IMAGE_URL);
+      imageUrl = normalizeImageUrl(
+        movie.poster_url,
+        OPHIM_CONFIG.CDN_IMAGE_URL
+      );
       imageWidth = 500;
       imageHeight = 750;
     }
@@ -105,7 +108,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const categories = movie.category?.map((c) => c.name).join(", ") ?? "";
     const siteUrl =
       process.env.NEXT_PUBLIC_SITE_URL ||
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+      (process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000");
     const pageUrl = `${siteUrl}/phim/${slug}`;
 
     return {
