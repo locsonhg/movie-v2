@@ -9,31 +9,36 @@ import { useMovieList } from "@/hooks/useOphimQueries";
 
 // ── Rank number ───────────────────────────────────────────────────────────────
 
-function RankNumber({ rank }: { rank: number }) {
+function RankBadge({ rank }: { rank: number }) {
   const isTop3 = rank <= 3;
-  const style: React.CSSProperties = isTop3
+  const colors = isTop3
     ? {
-        background: "linear-gradient(175deg, #fde68a 0%, #d97706 100%)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        backgroundClip: "text",
-        fontStyle: "italic",
+        bg: "linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)",
+        text: "#fff",
+        shadow: "0 4px 20px rgba(245,158,11,0.5)",
+        border: "2px solid rgba(255,255,255,0.3)",
       }
     : {
-        background: "linear-gradient(175deg, #d1d5db 0%, #6b7280 100%)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        backgroundClip: "text",
-        fontStyle: "italic",
+        bg: "linear-gradient(135deg, #374151 0%, #1f2937 100%)",
+        text: "#d1d5db",
+        shadow: "0 4px 12px rgba(0,0,0,0.4)",
+        border: "2px solid rgba(255,255,255,0.1)",
       };
 
   return (
-    <span
-      className="shrink-0 select-none font-black leading-none"
-      style={{ fontSize: "clamp(56px, 6vw, 80px)", lineHeight: 1, ...style }}
+    <div
+      className="absolute bottom-3 left-3 z-20 flex h-12 w-12 items-center justify-center rounded-xl font-black select-none"
+      style={{
+        background: colors.bg,
+        color: colors.text,
+        boxShadow: colors.shadow,
+        border: colors.border,
+        fontSize: rank >= 10 ? "18px" : "22px",
+        fontStyle: "italic",
+      }}
     >
       {rank}
-    </span>
+    </div>
   );
 }
 
@@ -57,7 +62,7 @@ function Badges({ movie }: { movie: MovieItem }) {
     badges.push({ label: movie.episode_current, bg: "#2563eb" });
   if (!badges.length) return null;
   return (
-    <div className="absolute bottom-2 left-2 flex flex-wrap gap-1">
+    <div className="absolute bottom-2 left-16 z-10 flex flex-wrap gap-1">
       {badges.map((b) => (
         <span
           key={b.label}
@@ -83,39 +88,84 @@ function Top10Card({
   cdnUrl: string;
 }) {
   const [hovered, setHovered] = useState(false);
+  const isTop3 = rank <= 3;
 
   return (
     <div
       className="shrink-0"
-      style={{ width: 210 }}
+      style={{ width: 260, overflow: "visible" }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <Link href={`/phim/${movie.slug}`} className="block">
-        {/* Poster */}
-        <div
-          className="relative w-full overflow-hidden rounded-xl bg-[#22253a]"
-          style={{
-            aspectRatio: "2/3",
-            boxShadow: "0 8px 24px rgba(0,0,0,0.6)",
-            transform: hovered ? "scale(1.04)" : "scale(1)",
-            transition: "transform 0.25s ease",
-          }}
-        >
-          <MovieCardImage movie={movie} cdnUrl={cdnUrl} />
-          <Badges movie={movie} />
+      <Link href={`/phim/${movie.slug}`} className="group block">
+        {/* Poster wrapper */}
+        <div className="relative" style={{ overflow: "visible" }}>
+          {/* Poster container */}
           <div
-            className="absolute inset-0 rounded-xl"
+            className="relative w-full overflow-hidden"
             style={{
-              background: hovered ? "rgba(0,0,0,0.2)" : "transparent",
-              transition: "background 0.2s",
+              aspectRatio: "2/3",
+              borderRadius: "16px",
+              boxShadow: isTop3
+                ? hovered
+                  ? "0 12px 40px rgba(245,158,11,0.35), 0 0 0 2px rgba(245,158,11,0.4)"
+                  : "0 8px 28px rgba(245,158,11,0.2), 0 0 0 1px rgba(245,158,11,0.15)"
+                : hovered
+                ? "0 12px 40px rgba(0,0,0,0.7)"
+                : "0 8px 24px rgba(0,0,0,0.5)",
+              transition: "box-shadow 0.3s ease",
             }}
-          />
-          {hovered && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg">
+          >
+            <MovieCardImage movie={movie} cdnUrl={cdnUrl} />
+
+            {/* Bottom gradient for badges */}
+            <div
+              className="absolute inset-x-0 bottom-0 h-24"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)",
+              }}
+            />
+
+            {/* Hover overlay */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: hovered ? "rgba(0,0,0,0.15)" : "transparent",
+                transition: "background 0.3s",
+              }}
+            />
+
+            {/* Top 3 crown glow */}
+            {isTop3 && (
+              <div
+                className="absolute inset-x-0 top-0 h-20"
+                style={{
+                  background:
+                    "linear-gradient(to bottom, rgba(245,158,11,0.15) 0%, transparent 100%)",
+                }}
+              />
+            )}
+
+            <Badges movie={movie} />
+
+            {/* Play button on hover */}
+            <div
+              className="absolute inset-0 flex items-center justify-center"
+              style={{
+                opacity: hovered ? 1 : 0,
+                transition: "opacity 0.3s",
+              }}
+            >
+              <div
+                className="flex h-14 w-14 items-center justify-center rounded-full backdrop-blur-sm"
+                style={{
+                  background: "rgba(245,166,35,0.9)",
+                  boxShadow: "0 4px 20px rgba(245,166,35,0.5)",
+                }}
+              >
                 <svg
-                  className="ml-0.5 h-5 w-5 text-black"
+                  className="ml-0.5 h-6 w-6 text-white"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -123,59 +173,60 @@ function Top10Card({
                 </svg>
               </div>
             </div>
-          )}
+          </div>
+
+          {/* Rank badge — outside overflow-hidden */}
+          <RankBadge rank={rank} />
         </div>
 
-        {/* Rank + info */}
-        <div className="mt-2 flex items-end gap-1.5" style={{ width: 210 }}>
-          <RankNumber rank={rank} />
-          <div className="min-w-0 flex-1 pb-1">
-            <p
-              className="line-clamp-2 text-[13px] font-bold leading-snug"
-              style={{
-                color: hovered ? "#f5a623" : "white",
-                transition: "color 0.2s",
-              }}
-            >
-              {movie.name}
+        {/* Movie info — below poster */}
+        <div className="mt-3 px-1">
+          <p
+            className="line-clamp-1 text-[16px] font-bold leading-snug"
+            style={{
+              color: hovered ? "#f5a623" : "white",
+              transition: "color 0.2s",
+            }}
+          >
+            {movie.name}
+          </p>
+          {movie.origin_name && (
+            <p className="mt-1 truncate text-[12px] text-[#6b7280]">
+              {movie.origin_name}
             </p>
-            {movie.origin_name && (
-              <p className="mt-0.5 truncate text-[11px] text-[#6b7280]">
-                {movie.origin_name}
-              </p>
+          )}
+          <div className="mt-1.5 flex flex-wrap items-center gap-x-1.5 text-[12px] text-[#9ca3af]">
+            {movie.year && <span>{movie.year}</span>}
+            {movie.year && movie.episode_current && (
+              <span className="text-[#4b5563]">·</span>
             )}
-            <div className="mt-0.5 flex flex-wrap items-center gap-x-1 text-[11px] text-[#9ca3af]">
-              {movie.year && <span>{movie.year}</span>}
-              {movie.year && movie.episode_current && (
-                <span className="text-[#4b5563]">·</span>
-              )}
-              {movie.episode_current && (
-                <span className="truncate">{movie.episode_current}</span>
-              )}
-            </div>
+            {movie.episode_current && (
+              <span className="truncate">{movie.episode_current}</span>
+            )}
           </div>
         </div>
       </Link>
     </div>
   );
 }
-
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 
 function Top10CardSkeleton({ rank }: { rank: number }) {
   return (
-    <div className="shrink-0" style={{ width: 210 }}>
+    <div className="shrink-0" style={{ width: 260 }}>
       <div
-        className="w-full animate-pulse rounded-xl bg-[#22253a]"
-        style={{ aspectRatio: "2/3" }}
-      />
-      <div className="mt-2 flex items-end gap-1.5">
-        <RankNumber rank={rank} />
-        <div className="flex-1 space-y-1.5 pb-1">
-          <div className="h-3 w-full animate-pulse rounded bg-[#22253a]" />
-          <div className="h-3 w-3/4 animate-pulse rounded bg-[#22253a]" />
-          <div className="h-2.5 w-1/2 animate-pulse rounded bg-[#22253a]" />
-        </div>
+        className="relative w-full animate-pulse bg-[#22253a]"
+        style={{
+          aspectRatio: "2/3",
+          borderRadius: "16px",
+        }}
+      >
+        <RankBadge rank={rank} />
+      </div>
+      <div className="mt-7 space-y-1.5 px-1">
+        <div className="h-4 w-3/4 animate-pulse rounded bg-[#22253a]" />
+        <div className="h-3 w-1/2 animate-pulse rounded bg-[#22253a]" />
+        <div className="h-3 w-1/3 animate-pulse rounded bg-[#22253a]" />
       </div>
     </div>
   );
@@ -223,7 +274,7 @@ export function Top10Slider({
 
   const scroll = (dir: "left" | "right") => {
     scrollRef.current?.scrollBy({
-      left: dir === "left" ? -660 : 660,
+      left: dir === "left" ? -820 : 820,
       behavior: "smooth",
     });
   };
@@ -231,8 +282,16 @@ export function Top10Slider({
   return (
     <div className="relative">
       {/* Header */}
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-bold text-white md:text-xl">{title}</h2>
+      <div className="mb-5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div
+            className="h-7 w-1.5 rounded-full"
+            style={{
+              background: "linear-gradient(to bottom, #f59e0b, #ef4444)",
+            }}
+          />
+          <h2 className="text-xl font-bold text-white md:text-2xl">{title}</h2>
+        </div>
         <Link
           href={`/danh-sach/${slug}`}
           className="text-sm text-[#f5a623] hover:underline"
@@ -269,8 +328,12 @@ export function Top10Slider({
         {/* Scrollable track */}
         <div
           ref={scrollRef}
-          className="flex gap-3 overflow-x-auto pb-3"
-          style={{ scrollbarWidth: "none" }}
+          className="flex gap-4 pb-4 pt-3 pl-1"
+          style={{
+            scrollbarWidth: "none",
+            overflowX: "auto",
+            overflowY: "visible",
+          }}
         >
           {isLoading
             ? Array.from({ length: 10 }, (_, i) => (
