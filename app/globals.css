@@ -52,6 +52,16 @@ body {
     scale: 1;
   }
 }
+
+@keyframes progressBar {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
 ::-webkit-scrollbar-track {
   background: var(--bg-secondary);
 }
