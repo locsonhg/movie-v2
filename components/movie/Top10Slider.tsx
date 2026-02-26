@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import type { MovieItem } from "@/types/ophim";
 import { OPHIM_CONFIG } from "@/constants/ophim";
 import { MovieCardImage } from "./MovieCardImage";
+import { MovieHoverPopup, useMovieHover } from "./MovieHoverPopup";
 import { useMovieList } from "@/hooks/useOphimQueries";
 
 // ── Rank number ───────────────────────────────────────────────────────────────
@@ -89,13 +90,25 @@ function Top10Card({
 }) {
   const [hovered, setHovered] = useState(false);
   const isTop3 = rank <= 3;
+  const { showPopup, handleMouseEnter, handleMouseLeave, handlePopupEnter } =
+    useMovieHover();
 
   return (
     <div
-      className="shrink-0"
-      style={{ width: 260, overflow: "visible" }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      className="shrink-0 relative"
+      style={{
+        width: 260,
+        overflow: "visible",
+        zIndex: showPopup ? 50 : undefined,
+      }}
+      onMouseEnter={() => {
+        setHovered(true);
+        handleMouseEnter();
+      }}
+      onMouseLeave={() => {
+        setHovered(false);
+        handleMouseLeave();
+      }}
     >
       <Link href={`/phim/${movie.slug}`} className="group block">
         {/* Poster wrapper */}
@@ -206,6 +219,16 @@ function Top10Card({
           </div>
         </div>
       </Link>
+
+      {/* Hover popup — desktop only */}
+      {showPopup && (
+        <MovieHoverPopup
+          movie={movie}
+          cdnUrl={cdnUrl}
+          onMouseEnter={handlePopupEnter}
+          onMouseLeave={handleMouseLeave}
+        />
+      )}
     </div>
   );
 }

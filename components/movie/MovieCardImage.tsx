@@ -8,20 +8,24 @@ import type { MovieItem } from "@/types/ophim";
 interface MovieCardImageProps {
   movie: MovieItem;
   cdnUrl?: string;
+  /** "poster" for portrait cards (2:3), "backdrop" for landscape (16:9) */
+  variant?: "poster" | "backdrop";
 }
 
-export function MovieCardImage({ movie }: MovieCardImageProps) {
+export function MovieCardImage({
+  movie,
+  variant = "poster",
+}: MovieCardImageProps) {
   const { data: imagesData } = useMovieImages(movie.slug);
 
-  // Prefer TMDB poster; fallback to thumb_url from CDN
-  const backdrop = imagesData?.images?.find((img) => img.type === "backdrop");
+  const image = imagesData?.images?.find((img) => img.type === variant);
   const src =
-    backdrop && imagesData
+    image && imagesData
       ? buildTmdbImageUrl(
           imagesData.image_sizes,
-          "backdrop",
-          backdrop.file_path,
-          "original"
+          variant,
+          image.file_path,
+          variant === "poster" ? "w500" : "w780"
         )
       : null;
 
