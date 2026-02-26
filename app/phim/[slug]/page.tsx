@@ -40,29 +40,56 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       return { title: `Xem phim ${name} - LocsongPhim` };
     }
 
-    // Build image URL: TMDB poster > CDN poster_url > CDN thumb_url
+    // Build image URL for OG:
+    // Priority: TMDB backdrop (landscape, ideal for Messenger/social) > TMDB poster > CDN poster_url > CDN thumb_url
     let imageUrl = "";
+    let imageWidth = 1280;
+    let imageHeight = 720;
+
     if (imagesData) {
-      const posterImage = imagesData.images.find(
-        (img) => img.type === "poster"
+      // 1. Try backdrop first — landscape ratio, best for Messenger previews
+      const backdropImage = imagesData.images.find(
+        (img) => img.type === "backdrop"
       );
-      if (posterImage) {
+      if (backdropImage) {
         imageUrl = buildTmdbImageUrl(
           imagesData.image_sizes,
-          "poster",
-          posterImage.file_path,
-          "w500"
+          "backdrop",
+          backdropImage.file_path,
+          "w1280"
         );
+        imageWidth = 1280;
+        imageHeight = 720;
+      }
+
+      // 2. Fallback to TMDB poster
+      if (!imageUrl) {
+        const posterImage = imagesData.images.find(
+          (img) => img.type === "poster"
+        );
+        if (posterImage) {
+          imageUrl = buildTmdbImageUrl(
+            imagesData.image_sizes,
+            "poster",
+            posterImage.file_path,
+            "w500"
+          );
+          imageWidth = 500;
+          imageHeight = 750;
+        }
       }
     }
+
+    // 3. Fallback to CDN URLs
     if (!imageUrl && movie.poster_url) {
-      imageUrl = normalizeImageUrl(
-        movie.poster_url,
-        OPHIM_CONFIG.CDN_IMAGE_URL
-      );
+      imageUrl = normalizeImageUrl(movie.poster_url, OPHIM_CONFIG.CDN_IMAGE_URL);
+      imageWidth = 500;
+      imageHeight = 750;
     }
     if (!imageUrl && movie.thumb_url) {
       imageUrl = normalizeImageUrl(movie.thumb_url, OPHIM_CONFIG.CDN_IMAGE_URL);
+      imageWidth = 500;
+      imageHeight = 750;
     }
 
     // Build description from movie content (strip HTML, max 160 chars)
@@ -95,9 +122,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           ? [
               {
                 url: imageUrl,
-                width: 500,
-                height: 750,
+                secureUrl: imageUrl,
+                width: imageWidth,
+                height: imageHeight,
                 alt: movie.name,
+                type: "image/jpeg",
               },
             ]
           : [],
