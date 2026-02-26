@@ -5,6 +5,7 @@ import { QueryProvider } from "@/providers/QueryProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { ScrollRestoration } from "@/components/layout/ScrollRestoration";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -128,6 +129,7 @@ export default function RootLayout({
         />
 
         <QueryProvider>
+          <ScrollRestoration />
           <Navbar />
           <main className="min-h-screen">{children}</main>
           <Footer />
