@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import { useMovieImages } from "@/hooks/useOphimQueries";
-import { buildTmdbImageUrl, normalizeImageUrl } from "@/utils/image";
-import { OPHIM_CONFIG } from "@/constants/ophim";
+import { buildTmdbImageUrl } from "@/utils/image";
 import type { MovieItem } from "@/types/ophim";
 
 interface MovieCardImageProps {
@@ -11,27 +10,24 @@ interface MovieCardImageProps {
   cdnUrl?: string;
 }
 
-export function MovieCardImage({
-  movie,
-  cdnUrl = OPHIM_CONFIG.CDN_IMAGE_URL,
-}: MovieCardImageProps) {
+export function MovieCardImage({ movie }: MovieCardImageProps) {
   const { data: imagesData } = useMovieImages(movie.slug);
 
   // Prefer TMDB poster; fallback to thumb_url from CDN
-  const poster = imagesData?.images?.find((img) => img.type === "poster");
+  const backdrop = imagesData?.images?.find((img) => img.type === "backdrop");
   const src =
-    poster && imagesData
+    backdrop && imagesData
       ? buildTmdbImageUrl(
           imagesData.image_sizes,
-          "poster",
-          poster.file_path,
-          "w500"
+          "backdrop",
+          backdrop.file_path,
+          "original"
         )
-      : normalizeImageUrl(movie.thumb_url, cdnUrl);
+      : null;
 
   if (!src) return <div className="h-full w-full bg-[#22253a]" />;
 
-  return (
+  return src ? (
     <Image
       src={src}
       alt={movie.name}
@@ -40,5 +36,7 @@ export function MovieCardImage({
       className="object-cover transition-transform duration-300 group-hover:scale-110"
       unoptimized
     />
+  ) : (
+    <div className="h-full w-full bg-[#22253a]" />
   );
 }
