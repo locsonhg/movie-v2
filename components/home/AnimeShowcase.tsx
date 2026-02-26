@@ -69,7 +69,7 @@ interface AnimeShowcaseProps {
 export function AnimeShowcase({
   cdnUrl = OPHIM_CONFIG.CDN_IMAGE_URL,
 }: AnimeShowcaseProps) {
-  const { data, isLoading } = useMovieList("hoat-hinh", { limit: 12, page: 1 });
+  const { data, isLoading } = useMovieList("hoat-hinh", { limit: 15, page: 1 });
   const movies = useMemo(() => data?.items ?? [], [data?.items]);
 
   const [selectedIdx, setSelectedIdx] = useState(0);

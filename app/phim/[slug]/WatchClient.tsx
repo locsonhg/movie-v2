@@ -538,41 +538,41 @@ export function WatchClient({ slug }: Props) {
           </div>
 
           {/* ── Sidebar ── */}
-          <div className="hidden w-72 shrink-0 xl:block">
-            <h3 className="mb-4 text-sm font-semibold text-white">
+          <div className="hidden w-96 shrink-0 xl:block">
+            <h3 className="mb-5 text-lg font-semibold text-white">
               Đề xuất cho bạn
             </h3>
-            <div className="space-y-2">
+            <div className="space-y-3">
               {relatedMovies.map((m) => {
                 return (
                   <Link
                     key={m._id}
                     href={`/phim/${m.slug}`}
-                    className="flex gap-3 rounded-xl p-2 transition-colors hover:bg-white/5"
+                    className="flex gap-4 rounded-xl p-2.5 transition-colors hover:bg-white/5"
                   >
-                    <div className="relative h-20 w-14 shrink-0 overflow-hidden rounded-lg group">
+                    <div className="relative h-36 w-24 shrink-0 overflow-hidden rounded-lg group">
                       <MovieCardImage movie={m} cdnUrl={CDN} />
                     </div>
-                    <div className="min-w-0 flex-1 py-1">
-                      <p className="line-clamp-2 text-xs font-medium leading-snug text-white/80">
+                    <div className="min-w-0 flex-1 py-1.5">
+                      <p className="line-clamp-2 text-base font-medium leading-snug text-white/90">
                         {m.name}
                       </p>
-                      <p className="mt-0.5 truncate text-[10px] text-white/35">
+                      <p className="mt-1.5 truncate text-sm text-white/40">
                         {m.origin_name}
                       </p>
-                      <div className="mt-2 flex items-center gap-1.5">
+                      <div className="mt-3 flex items-center gap-2">
                         {m.quality && (
-                          <span className="rounded bg-[#f5a623]/15 px-1.5 py-0.5 text-[9px] font-bold text-[#f5a623]">
+                          <span className="rounded bg-[#f5a623]/15 px-2.5 py-0.5 text-xs font-bold text-[#f5a623]">
                             {m.quality}
                           </span>
                         )}
                         {m.episode_current && (
-                          <span className="text-[9px] text-white/25">
+                          <span className="text-xs text-white/30">
                             {m.episode_current}
                           </span>
                         )}
                         {m.year && (
-                          <span className="text-[9px] text-white/25">
+                          <span className="text-xs text-white/30">
                             {m.year}
                           </span>
                         )}
