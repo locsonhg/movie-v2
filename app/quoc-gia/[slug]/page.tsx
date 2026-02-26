@@ -14,10 +14,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const title = `Phim ${formatTitle(slug)}`;
   return {
-    title: `${title} - LocsongPhim`,
+    title: `${title} - LocsonhgPhim`,
     description: `Xem phim ${formatTitle(
       slug
-    )} online miễn phí, chất lượng cao, vietsub nhanh nhất tại LocsongPhim`,
+    )} online miễn phí, chất lượng cao, vietsub nhanh nhất tại LocsonhgPhim`,
   };
 }
 

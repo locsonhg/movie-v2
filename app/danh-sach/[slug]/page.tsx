@@ -24,8 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     SLUG_TITLE_MAP[slug] ??
     slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   return {
-    title: `${title} - LocsongPhim`,
-    description: `Xem ${title} online miễn phí, chất lượng cao, vietsub nhanh nhất tại LocsongPhim`,
+    title: `${title} - LocsonhgPhim`,
+    description: `Xem ${title} online miễn phí, chất lượng cao, vietsub nhanh nhất tại LocsonhgPhim`,
   };
 }
 

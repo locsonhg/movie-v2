@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const name = slug
         .replace(/-/g, " ")
         .replace(/\b\w/g, (c) => c.toUpperCase());
-      return { title: `Xem phim ${name} - LocsongPhim` };
+      return { title: `Xem phim ${name} - LocsonhgPhim` };
     }
 
     // Build image URL for OG:
@@ -104,7 +104,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const title = `${movie.name}${
       movie.origin_name ? ` (${movie.origin_name})` : ""
-    } - LocsongPhim`;
+    } - LocsonhgPhim`;
     const categories = movie.category?.map((c) => c.name).join(", ") ?? "";
     const siteUrl =
       process.env.NEXT_PUBLIC_SITE_URL ||
@@ -121,7 +121,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title,
         description,
         url: pageUrl,
-        siteName: "LocsongPhim",
+        siteName: "LocsonhgPhim",
         type: "video.movie",
         images: imageUrl
           ? [
@@ -147,7 +147,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const name = slug
       .replace(/-/g, " ")
       .replace(/\b\w/g, (c) => c.toUpperCase());
-    return { title: `Xem phim ${name} - LocsongPhim` };
+    return { title: `Xem phim ${name} - LocsonhgPhim` };
   }
 }
 

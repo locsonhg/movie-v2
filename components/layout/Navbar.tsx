@@ -248,7 +248,7 @@ export function Navbar() {
           </div>
           <div className="flex flex-col leading-none">
             <span className="text-[17px] font-black tracking-tight text-white md:text-[20px]">
-              Locsong<span className="text-[#f5a623]">Phim</span>
+              Locsonhg<span className="text-[#f5a623]">Phim</span>
             </span>
             <span className="hidden text-[13px] text-[#a3a3a3] sm:block md:text-[15px]">
               Phim hay từ HG

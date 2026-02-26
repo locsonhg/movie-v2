@@ -101,7 +101,7 @@ export function Footer() {
               </div>
               <div>
                 <span className="text-lg font-black tracking-tight text-white">
-                  Locsong<span className="text-[#f5a623]">Phim</span>
+                  Locsonhg<span className="text-[#f5a623]">Phim</span>
                 </span>
                 <p className="text-[10px] font-medium text-white/40 leading-none mt-0.5">
                   Phim hay từ HG
@@ -158,7 +158,7 @@ export function Footer() {
       <div className="border-t border-white/5">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 py-5 text-center md:flex-row md:justify-between md:px-6 md:text-left">
           <p className="text-xs text-white/25">
-            © 2026 LocsongPhim. All rights reserved.
+            © 2026 LocsonhgPhim. All rights reserved.
           </p>
           <p className="text-xs font-medium text-white/30">
             🇻🇳 Hoàng Sa & Trường Sa là của Việt Nam!
