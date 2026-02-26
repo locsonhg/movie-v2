@@ -26,6 +26,11 @@ export const metadata: Metadata = {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     apple: "/icon.svg",
   },
+  other: {
+    "ed7a46dfbbfc63405a85fc54770b2f645a15dc39":
+      "ed7a46dfbbfc63405a85fc54770b2f645a15dc39",
+  },
+  referrer: "no-referrer-when-downgrade",
 };
 
 export default function RootLayout({
