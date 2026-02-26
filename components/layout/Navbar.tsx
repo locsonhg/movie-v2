@@ -266,14 +266,14 @@ export function Navbar() {
         >
           <form onSubmit={handleSearch}>
             <div
-              className={`flex h-9 w-85 items-center gap-2 rounded-xs border px-3 transition-all focus-within:border-[#f5a623]/60 ${
+              className={`flex h-11 w-85 items-center gap-3 rounded-lg border-2 px-4 transition-all hover:border-white/50 focus-within:border-white/80 ${
                 scrolled
-                  ? "border-[#3a3a3a] bg-[#1c1c1c]"
-                  : "border-white/20 bg-black/30 backdrop-blur-sm"
+                  ? "border-transparent bg-white/10 backdrop-blur-sm"
+                  : "border-transparent bg-white/15 backdrop-blur-md"
               }`}
             >
               <svg
-                className="h-4 w-4 shrink-0 text-[#6b7280]"
+                className="h-5 w-5 shrink-0 text-white/70"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -291,13 +291,13 @@ export function Navbar() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setSearchFocused(true)}
                 placeholder="Tìm kiếm phim, diễn viên"
-                className="flex-1 bg-transparent text-sm text-white placeholder-[#6b7280] outline-none"
+                className="flex-1 bg-transparent text-base text-white placeholder-white/60 outline-none"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="text-[#6b7280] transition-colors hover:text-white"
+                  className="text-white/70 transition-colors hover:text-white"
                 >
                   <svg
                     className="h-4 w-4"
@@ -315,7 +315,7 @@ export function Navbar() {
                 </button>
               )}
               {isSearching && debouncedQuery.length >= 2 && (
-                <div className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-[#6b7280] border-t-[#f5a623]" />
+                <div className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-white/40 border-t-white" />
               )}
             </div>
           </form>
