@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { useCallback, useState, useMemo } from "react";
+import { useCallback } from "react";
 import type { MovieListData, FilterItem } from "@/types/ophim";
 import { OPHIM_CONFIG } from "@/constants/ophim";
 import { MovieCard } from "./MovieCard";
@@ -14,10 +14,12 @@ interface MovieGridPageProps {
   cdnUrl?: string;
   onSortChange?: (sort: string) => void;
   currentSort?: string;
-  /** Danh sách thể loại để lọc (tuỳ chọn) */
   categories?: FilterItem[];
   currentCategory?: string;
   onCategoryChange?: (category: string) => void;
+  /** Controlled search input */
+  nameSearch?: string;
+  onNameSearchChange?: (v: string) => void;
 }
 
 const SORT_OPTIONS = [
@@ -36,11 +38,12 @@ export function MovieGridPage({
   categories,
   currentCategory = "",
   onCategoryChange,
+  nameSearch = "",
+  onNameSearchChange,
 }: MovieGridPageProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [nameSearch, setNameSearch] = useState("");
 
   const currentPage = Number(searchParams.get("page") ?? "1");
   const totalItems = data?.params?.pagination?.totalItems ?? 0;
@@ -49,17 +52,7 @@ export function MovieGridPage({
     data?.params?.pagination?.totalPages ??
     (totalItems > 0 ? Math.ceil(totalItems / totalItemsPerPage) : 1);
 
-  // Client-side filter by name
-  const movies = useMemo(() => {
-    const allMovies = data?.items ?? [];
-    if (!nameSearch.trim()) return allMovies;
-    const q = nameSearch.trim().toLowerCase();
-    return allMovies.filter(
-      (m) =>
-        m.name.toLowerCase().includes(q) ||
-        m.origin_name?.toLowerCase().includes(q)
-    );
-  }, [data?.items, nameSearch]);
+  const movies = data?.items ?? [];
 
   const goToPage = useCallback(
     (page: number) => {
@@ -126,7 +119,7 @@ export function MovieGridPage({
               type="text"
               placeholder="Tìm trong danh sách..."
               value={nameSearch}
-              onChange={(e) => setNameSearch(e.target.value)}
+              onChange={(e) => onNameSearchChange?.(e.target.value)}
               className="h-9 w-full rounded-lg border border-white/10 bg-[#22253a] pl-9 pr-3 text-sm text-white placeholder-[#6b7280] outline-none focus:border-[#e50914] transition"
             />
           </div>
