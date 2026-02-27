@@ -192,8 +192,36 @@ export function AnimeShowcase({
                   </span>
                 )}
                 {detail?.quality && (
-                  <span className="rounded border border-white/20 bg-white/5 px-2 py-0.5 text-xs font-semibold text-white">
+                  <span
+                    className="rounded px-2 py-0.5 text-xs font-bold text-white"
+                    style={{ backgroundColor: "#d97706e0" }}
+                  >
                     {detail.quality}
+                  </span>
+                )}
+                {(detail?.lang ?? featured.lang) && (
+                  <span
+                    className="rounded px-2 py-0.5 text-xs font-bold text-white"
+                    style={{ backgroundColor: "#16a34ae0" }}
+                  >
+                    {(() => {
+                      const raw = detail?.lang ?? featured.lang ?? "";
+                      return raw.includes("Thuyết")
+                        ? "Thuyết minh"
+                        : raw.includes("Lồng")
+                        ? "Lồng tiếng"
+                        : raw.includes("Vietsub") || raw.includes("Sub")
+                        ? "Vietsub"
+                        : raw;
+                    })()}
+                  </span>
+                )}
+                {(detail?.episode_current ?? featured.episode_current) && (
+                  <span
+                    className="rounded px-2 py-0.5 text-xs font-bold text-white"
+                    style={{ backgroundColor: "#2563ebe0" }}
+                  >
+                    {detail?.episode_current ?? featured.episode_current}
                   </span>
                 )}
                 {(detail?.year ?? featured.year) && (
@@ -352,8 +380,36 @@ export function AnimeShowcase({
                 </span>
               )}
               {detail?.quality && (
-                <span className="rounded border border-white/20 bg-white/5 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                <span
+                  className="rounded px-1.5 py-0.5 text-[10px] font-bold text-white"
+                  style={{ backgroundColor: "#d97706e0" }}
+                >
                   {detail.quality}
+                </span>
+              )}
+              {(detail?.lang ?? featured.lang) && (
+                <span
+                  className="rounded px-1.5 py-0.5 text-[10px] font-bold text-white"
+                  style={{ backgroundColor: "#16a34ae0" }}
+                >
+                  {(() => {
+                    const raw = detail?.lang ?? featured.lang ?? "";
+                    return raw.includes("Thuyết")
+                      ? "Thuyết minh"
+                      : raw.includes("Lồng")
+                      ? "Lồng tiếng"
+                      : raw.includes("Vietsub") || raw.includes("Sub")
+                      ? "Vietsub"
+                      : raw;
+                  })()}
+                </span>
+              )}
+              {(detail?.episode_current ?? featured.episode_current) && (
+                <span
+                  className="rounded px-1.5 py-0.5 text-[10px] font-bold text-white"
+                  style={{ backgroundColor: "#2563ebe0" }}
+                >
+                  {detail?.episode_current ?? featured.episode_current}
                 </span>
               )}
               {(detail?.year ?? featured.year) && (

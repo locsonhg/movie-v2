@@ -9,7 +9,7 @@ import { OPHIM_CONFIG } from "@/constants/ophim";
 
 // ── Hook: hover with enter/leave delay ───────────────────────────────────────
 
-export function useMovieHover(enterDelay = 500, leaveDelay = 300) {
+export function useMovieHover(enterDelay = 300, leaveDelay = 300) {
   const [showPopup, setShowPopup] = useState(false);
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);

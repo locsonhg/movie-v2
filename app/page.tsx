@@ -134,13 +134,15 @@ export default function Home() {
         <div className="mb-5 flex items-center gap-3">
           <span
             className="h-7 w-1.5 rounded-full"
-            style={{ background: "linear-gradient(to bottom, #f59e0b, #ef4444)" }}
+            style={{
+              background: "linear-gradient(to bottom, #f59e0b, #ef4444)",
+            }}
           />
           <h2 className="text-xl font-bold text-white md:text-2xl">
             Bạn đang quan tâm gì?
           </h2>
         </div>
-        <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-12">
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-6 md:gap-5 lg:grid-cols-6 xl:grid-cols-12">
           {GENRE_CARDS.map((g) => (
             <a
               key={g.slug}
@@ -153,14 +155,10 @@ export default function Home() {
               }}
             >
               {/* Shimmer overlay */}
-              <div
-                className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full"
-              />
+              <div className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
 
               {/* Glow border on hover */}
-              <div
-                className="pointer-events-none absolute inset-0 rounded-xl opacity-0 ring-2 ring-white/30 transition-opacity duration-300 group-hover:opacity-100"
-              />
+              <div className="pointer-events-none absolute inset-0 rounded-xl opacity-0 ring-2 ring-white/30 transition-opacity duration-300 group-hover:opacity-100" />
 
               {/* Icon */}
               <span className="text-2xl leading-none">{g.icon}</span>

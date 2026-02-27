@@ -36,31 +36,42 @@ export function MovieCard({
           {/* Overlay on hover */}
           <div className="absolute inset-0 bg-black/0 transition-all duration-200 group-hover:bg-black/40" />
 
-          {/* Badges */}
-          <div className="absolute left-1.5 top-1.5 flex flex-col gap-1">
-            {movie.quality && (
-              <span className="rounded bg-[#e50914] px-1.5 py-0.5 text-[10px] font-bold uppercase text-white">
-                {movie.quality}
-              </span>
-            )}
-            {movie.lang && (
-              <span className="rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white">
-                {movie.lang}
-              </span>
-            )}
-          </div>
-
-          {/* Episode badge */}
-          {movie.episode_current && (
-            <div className="absolute bottom-1.5 right-1.5">
-              <span className="rounded bg-black/70 px-1.5 py-0.5 text-[10px] text-white">
-                {movie.episode_current}
-              </span>
-            </div>
-          )}
-
           {/* Movie name overlay at bottom */}
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-2 pt-8">
+          <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 to-transparent px-2 pb-2 pt-8">
+            {/* Badges */}
+            <div className="mb-1.5 flex flex-wrap gap-1">
+              {movie.quality && (
+                <span
+                  className="rounded px-1.5 py-0.5 text-[10px] font-bold text-white"
+                  style={{ backgroundColor: "#d97706e0" }}
+                >
+                  {movie.quality}
+                </span>
+              )}
+              {movie.lang && (
+                <span
+                  className="rounded px-1.5 py-0.5 text-[10px] font-bold text-white"
+                  style={{ backgroundColor: "#16a34ae0" }}
+                >
+                  {movie.lang.includes("Thuyết")
+                    ? "Thuyết minh"
+                    : movie.lang.includes("Lồng")
+                    ? "Lồng tiếng"
+                    : movie.lang.includes("Vietsub") ||
+                      movie.lang.includes("Sub")
+                    ? "Vietsub"
+                    : movie.lang}
+                </span>
+              )}
+              {movie.episode_current && (
+                <span
+                  className="rounded px-1.5 py-0.5 text-[10px] font-bold text-white"
+                  style={{ backgroundColor: "#2563ebe0" }}
+                >
+                  {movie.episode_current}
+                </span>
+              )}
+            </div>
             <h3 className="line-clamp-1 text-sm font-medium text-white">
               {movie.name}
             </h3>
