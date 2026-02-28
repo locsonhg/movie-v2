@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   useMovieDetail,
   useMovieImages,
@@ -13,6 +13,7 @@ import {
 import { normalizeImageUrl, buildTmdbImageUrl } from "@/utils/image";
 import { OPHIM_CONFIG } from "@/constants/ophim";
 import { MovieCardImage } from "@/components/movie/MovieCardImage";
+import { useWatchHistory } from "@/hooks/useWatchHistory";
 
 const CDN = OPHIM_CONFIG.CDN_IMAGE_URL;
 const EPISODE_COLLAPSE = 30;
@@ -23,6 +24,7 @@ interface Props {
 
 export function WatchClient({ slug }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { data, isLoading } = useMovieDetail(slug);
   const movie = data?.item;
 
@@ -30,6 +32,73 @@ export function WatchClient({ slug }: Props) {
   const [epIdx, setEpIdx] = useState(0);
   const [collapsed, setCollapsed] = useState(true);
   const [activeTab, setActiveTab] = useState<"comment" | "review">("comment");
+
+  // Watch history
+  const { getProgress, saveProgress, clearProgress } = useWatchHistory();
+  const [resumeInfo, setResumeInfo] = useState<{
+    epIdx: number;
+    serverIdx: number;
+    epName: string;
+    serverName: string;
+  } | null>(null);
+  const hasCheckedHistory = useRef(false);
+  // true only when user manually picks an episode — prevents saving on initial restore
+  const userChoseEp = useRef(false);
+
+  // After movie data loads: URL param takes priority, then localStorage
+  useEffect(() => {
+    if (!movie || hasCheckedHistory.current) return;
+    hasCheckedHistory.current = true;
+
+    const servers = movie.episodes ?? [];
+    const epParam = searchParams.get("ep");
+
+    // 1. URL has ?ep=<slug> → restore from URL silently
+    if (epParam) {
+      for (let si = 0; si < servers.length; si++) {
+        const epList = servers[si].server_data ?? [];
+        const ei = epList.findIndex((e) => e.slug === epParam);
+        if (ei !== -1) {
+          setServerIdx(si);
+          setEpIdx(ei);
+          return;
+        }
+      }
+    }
+
+    // 2. No URL param → check localStorage
+    const saved = getProgress(slug);
+    if (!saved) return;
+
+    const server = servers[saved.serverIdx];
+    if (!server) return;
+    const ep = server.server_data?.[saved.epIdx];
+    if (!ep) return;
+
+    // Silently restore if it's ep 0 server 0
+    if (saved.serverIdx === 0 && saved.epIdx === 0) {
+      return;
+    }
+
+    setResumeInfo({
+      epIdx: saved.epIdx,
+      serverIdx: saved.serverIdx,
+      epName: saved.epName,
+      serverName: saved.serverName,
+    });
+  }, [movie, slug, getProgress, searchParams]);
+
+  // Sync URL whenever episode changes
+  useEffect(() => {
+    if (!movie) return;
+    const servers = movie.episodes ?? [];
+    const ep = servers[serverIdx]?.server_data?.[epIdx];
+    if (!ep) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("ep", ep.slug);
+    router.replace(`/phim/${slug}?${params.toString()}`, { scroll: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverIdx, epIdx, movie]);
 
   const servers = movie?.episodes ?? [];
   const currentServer = servers[serverIdx];
@@ -39,9 +108,27 @@ export function WatchClient({ slug }: Props) {
   const embedUrl = currentEp?.link_embed ?? "";
 
   const handleServerChange = (idx: number) => {
+    userChoseEp.current = true;
     setServerIdx(idx);
     setEpIdx(0);
   };
+
+  // Persist progress only when user actively changes episode/server
+  useEffect(() => {
+    if (!movie || !userChoseEp.current) return;
+    const servers = movie.episodes ?? [];
+    const server = servers[serverIdx];
+    if (!server) return;
+    const ep = server.server_data?.[epIdx];
+    if (!ep) return;
+    saveProgress({
+      slug,
+      serverIdx,
+      epIdx,
+      epName: ep.name,
+      serverName: server.server_name,
+    });
+  }, [movie, slug, serverIdx, epIdx, saveProgress]);
 
   const imdbScore = movie?.imdb?.vote_average
     ? movie.imdb.vote_average.toFixed(1)
@@ -129,6 +216,50 @@ export function WatchClient({ slug }: Props) {
           )}
         </div>
       </div>
+
+      {/* ── Resume toast ── */}
+      {resumeInfo && (
+        <div className="mx-4 mb-3 flex items-center gap-3 rounded-xl border border-[#f5a623]/30 bg-[#f5a623]/10 px-4 py-3 md:mx-6">
+          <svg
+            className="h-5 w-5 shrink-0 text-[#f5a623]"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+          </svg>
+          <p className="min-w-0 flex-1 text-sm text-white/80">
+            Bạn đang xem dở{" "}
+            <span className="font-semibold text-[#f5a623]">
+              Tập {resumeInfo.epName}
+            </span>
+            {resumeInfo.serverName && (
+              <span className="text-white/40"> · {resumeInfo.serverName}</span>
+            )}
+          </p>
+          <div className="flex shrink-0 gap-2">
+            <button
+              onClick={() => {
+                userChoseEp.current = true;
+                setServerIdx(resumeInfo.serverIdx);
+                setEpIdx(resumeInfo.epIdx);
+                setResumeInfo(null);
+              }}
+              className="rounded-lg bg-[#f5a623] px-3 py-1.5 text-xs font-bold text-black transition-colors hover:bg-[#e6951a]"
+            >
+              Tiếp tục
+            </button>
+            <button
+              onClick={() => {
+                clearProgress(slug);
+                setResumeInfo(null);
+              }}
+              className="rounded-lg border border-white/15 px-3 py-1.5 text-xs text-white/50 transition-colors hover:border-white/30 hover:text-white"
+            >
+              Xem từ đầu
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ── Video section ── */}
       <div className="bg-[#0d0f18]">
@@ -412,7 +543,10 @@ export function WatchClient({ slug }: Props) {
                   {displayEps.map((ep, idx) => (
                     <button
                       key={ep.slug}
-                      onClick={() => setEpIdx(idx)}
+                      onClick={() => {
+                        userChoseEp.current = true;
+                        setEpIdx(idx);
+                      }}
                       className={`rounded-lg py-2 text-xs font-medium transition-all ${
                         idx === safeEpIdx
                           ? "bg-[#f5a623] text-black shadow-md shadow-[#f5a623]/25"
